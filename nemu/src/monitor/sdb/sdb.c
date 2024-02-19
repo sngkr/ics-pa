@@ -33,6 +33,7 @@ static char* rl_gets() {
     line_read = NULL;
   }
 
+  /*显示提示符 "(nemu) " 并等待用户输入一行字符串*/
   line_read = readline("(nemu) ");
 
   if (line_read && *line_read) {
