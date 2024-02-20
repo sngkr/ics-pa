@@ -105,10 +105,10 @@ static int cmd_step(char *args){
   if(args == NULL){
     step = 1;
   }else{
-    int re = sscanf(args,"%d",&step);
-    if(re == -1){
-    	printf("usage: si [N]");
-    }
+    sscanf(args,"%d",&step);
+    //if(re == -1){
+    //	printf("usage: si [N]");
+    //}
   }
   cpu_exec(step);
   return 0;	
