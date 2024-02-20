@@ -117,6 +117,7 @@ static int cmd_info(char* args){
 	
   char par;
   sscanf(args,"%c",&par);
+  /* info r */
   if(par == 'r')		
     isa_reg_display();
     
