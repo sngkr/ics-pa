@@ -56,6 +56,8 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_step(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -64,9 +66,10 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  	
   /* TODO: Add more commands */
-
+  {"s", "Let the program step into N instructions and then pause the execution,When N is not given, the default is 1", cmd_step},
+  
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -92,6 +95,17 @@ static int cmd_help(char *args) {
     printf("Unknown command '%s'\n", arg);
   }
   return 0;
+}
+
+static int cmd_step(char *args){
+  int step = 0;
+  if(args == NULL){
+    step = 1;
+  }else{
+    sscanf(args,"%d",&step);
+  }
+  cpu_exec(step);
+  return 0;	
 }
 
 void sdb_set_batch_mode() {
@@ -127,6 +141,7 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
+      	/*返回负数退出*/
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
