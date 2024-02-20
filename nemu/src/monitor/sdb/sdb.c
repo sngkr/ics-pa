@@ -115,9 +115,15 @@ static int cmd_step(char *args){
 
 static int cmd_info(char* args){
 	
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    /* no argumemt given  */
+    printf("ping: usage error: Parameter r required\n");
+  }
+  
+
   char par;
-  char* temp =  strtok(NULL, " ");
-  printf("test: %s\n", temp);
+  // char* temp =  strtok(NULL, " ");
   sscanf(args,"%c",&par);
   /* info r */
   if(par == 'r')		
