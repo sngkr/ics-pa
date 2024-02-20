@@ -105,13 +105,18 @@ static int cmd_step(char *args){
   if(args == NULL){
     step = 1;
   }else{
-    sscanf(args,"%d",&step);
+    int re = sscanf(args,"%d",&step);
+    if(re == -1){
+    	printf("usage: si [N]");
+    }
   }
   cpu_exec(step);
   return 0;	
 }
 
 static int cmd_info(char* args){
+	
+  isa_reg_display();
   return 0;
 }
 
