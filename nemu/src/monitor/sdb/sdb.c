@@ -48,7 +48,6 @@ static int cmd_c(char *args) {
   return 0;
 }
 
-
 static int cmd_q(char *args) {
   nemu_state.state = NEMU_QUIT;		
   return -1;
@@ -71,7 +70,7 @@ static struct {
   	
   /* TODO: Add more commands */
   {"si", "Let the program step into N instructions and then pause the execution,When N is not given, the default is 1", cmd_step},
-  {"info", "info r :Print register status, info w:Prints the monitoring point information", cmd_info},
+  {"info", "info r :Print register status", cmd_info},
   
 };
 
@@ -116,7 +115,11 @@ static int cmd_step(char *args){
 
 static int cmd_info(char* args){
 	
-  isa_reg_display();
+  char par;
+  sscanf(args,"%c",&par);
+  if(par == 'r')		
+    isa_reg_display();
+    
   return 0;
 }
 
@@ -158,7 +161,6 @@ void sdb_mainloop() {
         break;
       }
     }
-
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
 }
