@@ -116,6 +116,8 @@ static int cmd_step(char *args){
 static int cmd_info(char* args){
 	
   char par;
+  char* temp =  strtok(NULL, " ");
+  printf("test: %s\n", temp);
   sscanf(args,"%c",&par);
   /* info r */
   if(par == 'r')		
