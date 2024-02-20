@@ -58,6 +58,8 @@ static int cmd_help(char *args);
 
 static int cmd_step(char *args);
 
+static int cmd_info(char* args);
+
 static struct {
   const char *name;
   const char *description;
@@ -69,6 +71,7 @@ static struct {
   	
   /* TODO: Add more commands */
   {"si", "Let the program step into N instructions and then pause the execution,When N is not given, the default is 1", cmd_step},
+  {"info", "info r :Print register status, info w:Prints the monitoring point information", cmd_info},
   
 };
 
@@ -106,6 +109,10 @@ static int cmd_step(char *args){
   }
   cpu_exec(step);
   return 0;	
+}
+
+static int cmd_info(char* args){
+  return 0;
 }
 
 void sdb_set_batch_mode() {
