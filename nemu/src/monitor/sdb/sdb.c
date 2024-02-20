@@ -100,35 +100,27 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_step(char *args){
-  int step = 0;
-  if(args == NULL){
-    step = 1;
-  }else{
-    sscanf(args,"%d",&step);
-    //if(re == -1){
-    //	printf("usage: si [N]");
-    //}
+ /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  int step = 1;
+  if(arg != NULL){
+    step = atoi(arg);
   }
   cpu_exec(step);
   return 0;	
 }
 
 static int cmd_info(char* args){
-	
+	/* extract the first argument */
   char *arg = strtok(NULL, " ");
   if(arg == NULL){
     /* no argumemt given  */
     printf("ping: usage error: Parameter r required\n");
-  }
-  
-
-  char par;
-  // char* temp =  strtok(NULL, " ");
-  sscanf(args,"%c",&par);
-  /* info r */
-  if(par == 'r')		
-    isa_reg_display();
-    
+  }else{
+    if(strcmp(arg, "r") == 0){
+      isa_reg_display();
+    }
+  } 
   return 0;
 }
 
