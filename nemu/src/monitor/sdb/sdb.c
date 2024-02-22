@@ -138,7 +138,7 @@ static int cmd_info(char *args) {
 
 static int cmd_x(char *args) {
   int len = atoi(strtok(NULL, " "));
-  paddr_t baseaddr =strtol(strtok(NULL, " "), NULL, 16);
+  uint32_t baseaddr =strtol(strtok(NULL, " "), NULL, 16);
   for (int i = 0; i < len; i++) {
     printf("%x\n", paddr_read(baseaddr, 4)); 
     baseaddr += 4;
