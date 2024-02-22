@@ -137,15 +137,11 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-  char *n = strtok(args, " ");
-  char *baseaddr = strtok(NULL, " ");
-  int len = 0;
-  paddr_t addr = 0;
-  sscanf(n, "%d", &len);
-  sscanf(baseaddr, "%x", &addr);
+  int len = atoi(strtok(NULL, " "));
+  paddr_t baseaddr =strtol(strtok(NULL, " "), NULL, 16);
   for (int i = 0; i < len; i++) {
-    printf("%x\n", paddr_read(addr, 4));  // addr len
-    addr = addr + 4;
+    printf("%x\n", paddr_read(baseaddr, 4)); 
+    baseaddr += 4;
   }
   return 0;
 
