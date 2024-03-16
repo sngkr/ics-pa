@@ -65,6 +65,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_p(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -85,6 +87,8 @@ static struct {
      "starting memory address, and output N consecutive 4-byte values in "
      "hexadecimal format",
      cmd_x},
+
+    {"p", "Calculate ", cmd_p},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -136,6 +140,7 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+
 static int cmd_x(char *args) {
   int len = atoi(strtok(NULL, " "));
   uint32_t baseaddr =strtol(strtok(NULL, " "), NULL, 16);
@@ -145,6 +150,25 @@ static int cmd_x(char *args) {
   }
   return 0;
 
+}
+
+static int cmd_p(char *args) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    /* no argumemt given  */
+    printf("info: usage error\n");
+  } 
+  bool success = true;
+  int num = expr(args,&success);
+  if(success==false) {
+    printf("Wrong expression\n");
+    return 0;
+  }else {
+    printf("0x%x or %dD\n",num,num);
+    return 0;
+  }
+  return 0;
 }
 
 void sdb_set_batch_mode() { is_batch_mode = true; }
