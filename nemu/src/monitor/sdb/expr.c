@@ -94,7 +94,7 @@ void init_regex() {
        0：表示成功编译；
       非0：表示编译失败，用regerror查看失败信息
     */
-     // 把我们自己订的规则rules存入re数组
+    // 把我们自己订的规则rules存入re数组
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     Log("rules[%d] = %s", i, rules[i].regex);
     if (ret != 0) {
@@ -161,15 +161,14 @@ static bool make_token(char *e) {
           case DIV:
           case MULTI:
           case NUM:
-              tokens[nr_token].type = rules[i].token_type;
+            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token++].str, substr_start, substr_len);
-            Log("Type: %d  ",tokens[nr_token-1].type);
-            // tokens[nr_token++].str[substr_len] = '\0';
-            int temp = 0;
-            while(temp < substr_len){
-              printf("%c", tokens[nr_token-1].str[temp++]);
-            }
-            printf("\n");
+            // Log("Type: %d  ",tokens[nr_token-1].type);
+            // int temp = 0;
+            // while(temp < substr_len){
+            //   printf("%c", tokens[nr_token-1].str[temp++]);
+            // }
+            // printf("\n");
             break;
           case TK_NOTYPE:
             break;
@@ -254,14 +253,14 @@ int eval(int p, int q) {
     return eval(p + 1, q - 1);
   } else {
     // op = the position of 主运算符 in the token expression;
-    int op = calc(p , q);
+    int op = calc(p, q);
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
 
     switch (op) {
       case '+':
         return val1 + val2;
-      case '-': 
+      case '-':
         return val1 - val2;
       case '*': /* ... */
         return val1 * val2;
@@ -281,6 +280,6 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
-  
-  return eval(0, nr_token-1);
+
+  return eval(0, nr_token - 1);
 }
