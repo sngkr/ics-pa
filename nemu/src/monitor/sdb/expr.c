@@ -161,12 +161,12 @@ static bool make_token(char *e) {
           case DIV:
           case MULTI:
           case NUM:
-            tokens[nr_token].type = rules[i].token_type;
+              tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token++].str, substr_start, substr_len);
             Log("Type: %d tokens[%d] = %s ",tokens[nr_token].type,nr_token-1,tokens[nr_token].str);
             tokens[nr_token].str[substr_len] = '\0';
             break;
-          default:
+          case TK_NOTYPE:
             break;
         }
 
