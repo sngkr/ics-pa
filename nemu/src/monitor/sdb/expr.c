@@ -25,7 +25,7 @@ enum {
   // - 45
   // * 42
   // / 47
-  MULTI = 42,
+  MULTI = 41,
   ADD = 43,
   SUB = 45,
   DIV = 47,
