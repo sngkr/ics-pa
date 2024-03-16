@@ -258,7 +258,7 @@ int eval(int p, int q) {
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
 
-    switch (op) {
+    switch (tokens[op].type) {
       case '+':
         return val1 + val2;
       case '-':
