@@ -79,6 +79,7 @@ void init_regex() {
     */
 
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+    Log("match rules[%d] = \"%s\" re[%d] =", i ,rules[i].regex,i);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
       panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
