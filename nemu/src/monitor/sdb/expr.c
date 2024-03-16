@@ -21,11 +21,15 @@
 #include <regex.h>
 
 enum {
+  // ( 40
+  // ) 41
+  // * 42
   // + 43 
   // - 45
-  // * 42
   // / 47
-  MULTI = 41,
+  LEFT = 40,
+  RIGHT = 41,
+  MULTI = 42,
   ADD = 43,
   SUB = 45,
   DIV = 47,
@@ -56,6 +60,8 @@ static struct rule {
     {"\\-", SUB},         
     {"\\*", MULTI},         
     {"\\/", DIV}, 
+    {"\\(",LEFT},
+    {"\\)", RIGHT},
     {"[0-9]+", NUM},        
     {"==", TK_EQ},        // equal
 
