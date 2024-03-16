@@ -254,6 +254,7 @@ int eval(int p, int q) {
   } else {
     // op = the position of 主运算符 in the token expression;
     int op = calc(p, q);
+    Log("op: %d", op);
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
 
