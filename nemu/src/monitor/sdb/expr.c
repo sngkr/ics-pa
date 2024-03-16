@@ -21,7 +21,19 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  // + 43 
+  // - 45
+  // * 42
+  // / 47
+  MULTI = 42,
+  ADD = 43,
+  SUB = 45,
+  DIV = 47,
+  NUM,
+
+  TK_NOTYPE = 256, 
+  //257
+  TK_EQ,
 
   /* TODO: Add more token types */
 
@@ -40,10 +52,11 @@ static struct rule {
     {" +", TK_NOTYPE},    // spaces
     // '\\' 在c中识别为 '\'
     // '\+' 在正则中表示
-    {"\\\\+", '+'},         // plus
-    {"\\-", '-'},         // plus
-    {"\\*", '*'},         // plus
-    {"\\/", '/'},         // plus
+    {"\\+", ADD},        // add
+    {"\\-", SUB},         
+    {"\\*", MULTI},         
+    {"\\/", DIV}, 
+    {"[0-9]+", NUM},        
     {"==", TK_EQ},        // equal
 
 
