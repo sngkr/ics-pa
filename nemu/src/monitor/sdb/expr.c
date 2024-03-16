@@ -94,7 +94,7 @@ void init_regex() {
        0：表示成功编译；
       非0：表示编译失败，用regerror查看失败信息
     */
-
+     // 把我们自己订的规则rules存入re数组
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     Log("rules[%d] = %s", i, rules[i].regex);
     if (ret != 0) {
