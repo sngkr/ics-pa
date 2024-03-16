@@ -24,7 +24,7 @@ enum {
   // ( 40
   // ) 41
   // * 42
-  // + 43 
+  // + 43
   // - 45
   // / 47
   LEFT = 40,
@@ -35,8 +35,8 @@ enum {
   DIV = 47,
   NUM,
 
-  TK_NOTYPE = 256, 
-  //257
+  TK_NOTYPE = 256,
+  // 257
   TK_EQ,
 
   /* TODO: Add more token types */
@@ -52,20 +52,18 @@ static struct rule {
      * Pay attention to the precedence level of different rules.
      */
 
-    //识别任意长度空格
-    {" +", TK_NOTYPE},    // spaces
+    // 识别任意长度空格
+    {" +", TK_NOTYPE},  // spaces
     // '\\' 在c中识别为 '\'
     // '\+' 在正则中表示
-    {"\\+", ADD},        // add
-    {"\\-", SUB},         
-    {"\\*", MULTI},         
-    {"\\/", DIV}, 
-    {"\\(",LEFT},
-    {"\\)", RIGHT},
-    {"[0-9]+", NUM},        
-    {"==", TK_EQ},        // equal
-
-
+    {"\\+", ADD},  // add
+    {"\\-", SUB},
+    {"\\*", MULTI},
+    {"\\/", DIV},
+    {"\\(", '('},
+    {"\\)", ')'},
+    {"[0-9]+", NUM},
+    {"==", TK_EQ},  // equal
 
 };
 
@@ -124,9 +122,25 @@ static bool make_token(char *e) {
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i++) {
+      /*
+      compiled：一个指向已经编译的正则表达式的 regex_t 结构体的指针。
+      string：要在其中执行匹配的输入字符串。
+      nmatch：regmatch_t 结构体数组 pmatch[]
+      的大小，即最多可以存储多少个匹配结果。 pmatch[]：一个 regmatch_t
+      结构体数组，用于存储匹配结果的位置信息。
+      eflags：一个整数，用于指定匹配标志，如 REG_EXTENDED、REG_ICASE 等
+
+      int regexec(const regex_t *preg, const char *string, size_t
+      nmatch,regmatch_t pmatch[], int eflags);
+      参数preg指向编译后的正则表达式，参数string是将要进行匹配的字符串。
+      在匹配结束后，nmatch告诉regexec函数最多可以把多少匹配结果填充到pmatch数组中，
+      在匹配结束后，string+pmatch[0].rm_so到string+pmatch[0].rm_eo是第一个匹配的字符串，以此类推。
+      */
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 &&
           pmatch.rm_so == 0) {
+        // 把字符串逐个识别成token，存到pmatch
         char *substr_start = e + position;
+        // 把token对应的起始字符串地址存入substr_start
         int substr_len = pmatch.rm_eo;
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i,
@@ -139,10 +153,22 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
         // Token tmp_token;
-        // switch (rules[i].token_type) {
-        //   default: TODO();
-        // }
-        // len = nr_token;
+        switch (rules[i].token_type) {
+          case ADD:
+          case SUB:
+          case LEFT:
+          case RIGHT:
+          case DIV:
+          case MULTI:
+          case NUM:
+            tokens[nr_token].type = rules[i].token_type;
+            strncpy(tokens[nr_token++].str, substr_start, substr_len);
+            tokens[nr_token].str[substr_len] = '\0';
+            break;
+          default:
+            break;
+        }
+
         break;
       }
     }
@@ -156,6 +182,91 @@ static bool make_token(char *e) {
   return true;
 }
 
+int check_parentheses(int p, int q) {
+  if (tokens[p].type != '(' || tokens[q].type != ')') {
+    return false;
+  }
+
+  int count = 0;
+  for (int i = p + 1; i < q; i++) {
+    if (tokens[i].type == '(') {
+      count++;
+    } else if (tokens[i].type == ')') {
+      if (count == 0) {
+        return false;  // 出现多余的右括号，不匹配
+      }
+      count--;
+    }
+  }
+
+  return count == 0;  // 如果 count 不为 0，则有多余的左括号，不匹配
+}
+
+int calc(int p, int q) {
+  int sign = 0;
+  int count = 0;
+  int op = -1;
+  for (int i = p; i <= q; i++) {
+    if (tokens[i].type == '(') {
+      count++;
+      continue;
+    }
+    if (tokens[i].type == ')') {
+      count--;
+      continue;
+    }
+    if (count != 0) {
+      continue;
+    }
+    if (tokens[i].type == NUM) {
+      continue;
+    }
+    if (sign <= 1 && (tokens[i].type == '+' || tokens[i].type == '-')) {
+      op = i;
+      sign = 1;
+    } else if (sign == 0 && (tokens[i].type == '*' || tokens[i].type == '/')) {
+      op = i;
+    }
+  }
+  return op;
+}
+
+int eval(int p, int q) {
+  if (p > q) {
+    /* Bad expression */
+    panic("Bad expression");
+  } else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+    return atoi(tokens[p].str);
+  } else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1);
+  } else {
+    // op = the position of 主运算符 in the token expression;
+    int op = calc(p , q);
+    int val1 = eval(p, op - 1);
+    int val2 = eval(op + 1, q);
+
+    switch (op) {
+      case '+':
+        return val1 + val2;
+      case '-': 
+        return val1 - val2;
+      case '*': /* ... */
+        return val1 * val2;
+      case '/': /* ... */
+        return val1 / val2;
+      default:
+        assert(0);
+    }
+  }
+}
+
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -163,7 +274,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  //TODO();
-
-  return 0;
+  // TODO();
+  
+  return eval(0, nr_token-1);
 }
