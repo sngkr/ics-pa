@@ -158,16 +158,10 @@ static int cmd_p(char *args) {
   if (arg == NULL) {
     /* no argumemt given  */
     printf("info: usage error\n");
-  } 
-  bool success = true;
-  int num = expr(args,&success);
-  if(success==false) {
-    printf("Wrong expression\n");
-    return 0;
-  }else {
-    printf("0x%x or %dD\n",num,num);
-    return 0;
   }
+  bool success = true; 
+  printf("%d \n", expr(args,&success));
+
   return 0;
 }
 
