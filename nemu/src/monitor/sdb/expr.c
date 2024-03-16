@@ -36,8 +36,14 @@ static struct rule {
      * Pay attention to the precedence level of different rules.
      */
 
+    //识别任意长度空格
     {" +", TK_NOTYPE},    // spaces
+    // '\\' 在c中识别为 '\'
+    // '\+' 在正则中表示
     {"\\+", '+'},         // plus
+    {"\\-", '-'},         // plus
+    {"\\*", '*'},         // plus
+    {"\\/", '/'},         // plus
     {"==", TK_EQ},        // equal
 
 
