@@ -163,8 +163,13 @@ static bool make_token(char *e) {
           case NUM:
               tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token++].str, substr_start, substr_len);
-            Log("Type: %d tokens[%d] = %s ",tokens[nr_token-1].type,nr_token-1,tokens[nr_token].str);
+            Log("Type: %d  ",tokens[nr_token-1].type);
             tokens[nr_token].str[substr_len] = '\0';
+            int temp = 0;
+            while(temp < substr_len){
+              printf("%c", tokens[nr_token-1].str[temp++]);
+            }
+            printf("\n");
             break;
           case TK_NOTYPE:
             break;
