@@ -258,7 +258,7 @@ int calc(int p, int q) {
         default:
           continue;  // If it's not an operator, we skip it
       }
-      if (current_precedence >= precedence) {
+      if (current_precedence <= precedence) {
         op = i;
         Log("nowop %d", op);
         precedence = current_precedence;
