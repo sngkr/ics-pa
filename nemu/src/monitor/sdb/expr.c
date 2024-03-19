@@ -265,7 +265,7 @@ int calc(int p, int q) {
         op = i;
         precedence = current_precedence;
       }
-      op = i;
+      // op = i;
     }
   }
   return op;
