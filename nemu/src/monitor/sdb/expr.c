@@ -212,7 +212,7 @@ int calc(int p, int q) {
   // int sign = 0;
   int count = 0;
   int op = -1;
-   int precedence = 100;
+  int precedence = 100;
   for (int i = p; i <= q; i++) {
     // if (tokens[i].type == '(') {
     //   count++;
