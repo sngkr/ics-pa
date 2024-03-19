@@ -210,28 +210,20 @@ int check_parentheses(int p, int q) {
 }
 
 int calc(int p, int q) {
-  int sign = 0;
+ 
   int count = 0;
   int op = -1;
   for (int i = p; i <= q; i++) {
-    if (tokens[i].type == '(') {
+
+    if(tokens[i].type == LEFT){
       count++;
-      continue;
-    }
-    if (tokens[i].type == ')') {
+    }else if(tokens[i].type == RIGHT){
       count--;
-      continue;
-    }
-    if (count != 0) {
-      continue;
-    }
-    if (tokens[i].type == NUM) {
-      continue;
-    }
-    if (sign <= 1 && (tokens[i].type == '+' || tokens[i].type == '-')) {
-      op = i;
-      sign = 1;
-    } else if (sign == 0 && (tokens[i].type == '*' || tokens[i].type == '/')) {
+    }else if(count == 0 &&
+      (tokens[i].type == ADD || 
+       tokens[i].type == SUB || 
+       tokens[i].type == MULTI || 
+       tokens[i].type == DIV)){
       op = i;
     }
   }
