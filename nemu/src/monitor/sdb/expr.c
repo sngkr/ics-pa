@@ -245,27 +245,23 @@ int calc(int p, int q) {
       int current_precedence;
       switch (tokens[i].type) {
         case ADD:
-          current_precedence = 1;
-          break;
         case SUB:
           current_precedence = 1;
           break;
         case MULTI:
-          current_precedence = 2;
-          break;
         case DIV:
           current_precedence = 2;
           break;
         default:
-          continue;  // If it's not an operator, we skip it
+          continue;  
       }
       // Log("current_precedence %d: ", current_precedence);
       if (current_precedence <= precedence) {
-        Log("i: %d current_precedence : %d  precedence:%d ",i, op, precedence);
+        // Log("i: %d current_precedence : %d  precedence:%d ",i, op, precedence);
         op = i;
         precedence = current_precedence;
       }
-      // op = i;
+
     }
   }
   return op;
