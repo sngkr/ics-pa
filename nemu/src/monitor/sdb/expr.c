@@ -234,7 +234,7 @@ int calc(int p, int q) {
     // {
     //   op = i;
     // }
-    int precedence = 0;
+    int precedence = 100;
     // 平级先算哪个都行，对于这个  先算优先级低的
     if (tokens[i].type == LEFT) {
       count++;
@@ -260,7 +260,7 @@ int calc(int p, int q) {
       }
       if (current_precedence <= precedence) {
         op = i;
-        Log("nowop %d", op);
+        Log("no wop %d", op);
         precedence = current_precedence;
       }
       op = i;
