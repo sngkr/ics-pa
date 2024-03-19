@@ -30,9 +30,9 @@ enum {
   LEFT = 40,
   RIGHT = 41,
   MULTI = 42,
-  DIV = 47,
   ADD = 43,
   SUB = 45,
+  DIV = 47,
   NUM,
 
   TK_NOTYPE = 256,
@@ -210,22 +210,42 @@ int check_parentheses(int p, int q) {
 }
 
 int calc(int p, int q) {
- 
+  int sign = 0;
   int count = 0;
   int op = -1;
   for (int i = p; i <= q; i++) {
-
-    if(tokens[i].type == LEFT){
+    if (tokens[i].type == '(') {
       count++;
-    }else if(tokens[i].type == RIGHT){
+      continue;
+    }
+    if (tokens[i].type == ')') {
       count--;
-    }else if(count == 0 &&
-      (tokens[i].type == ADD || 
-       tokens[i].type == SUB || 
-       tokens[i].type == MULTI || 
-       tokens[i].type == DIV)){
+      continue;
+    }
+    if (count != 0) {
+      continue;
+    }
+    if (tokens[i].type == NUM) {
+      continue;
+    }
+    if (sign <= 1 && (tokens[i].type == '+' || tokens[i].type == '-')) {
+      op = i;
+      sign = 1;
+    } else if (sign == 0 && (tokens[i].type == '*' || tokens[i].type == '/')) {
       op = i;
     }
+
+    //     if(tokens[i].type == LEFT){
+    //   count++;
+    // }else if(tokens[i].type == RIGHT){
+    //   count--;
+    // }else if(count == 0 &&
+    //   (tokens[i].type == ADD || 
+    //    tokens[i].type == SUB || 
+    //    tokens[i].type == MULTI || 
+    //    tokens[i].type == DIV)){
+    //   op = i;
+    // }
   }
   return op;
 }
@@ -252,7 +272,6 @@ int eval(int p, int q) {
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
 
-    Log("%d",tokens[op].type);
     switch (tokens[op].type) {
       case '+':
         return val1 + val2;
