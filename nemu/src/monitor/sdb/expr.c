@@ -234,7 +234,7 @@ int calc(int p, int q) {
     // {
     //   op = i;
     // }
-    int precedence = __INT_MAX__;
+    int precedence = 0;
     // 平级先算哪个都行，对于这个  先算优先级低的
     if (tokens[i].type == LEFT) {
       count++;
@@ -258,7 +258,7 @@ int calc(int p, int q) {
         default:
           continue;  // If it's not an operator, we skip it
       }
-      if (current_precedence <= precedence) {
+      if (current_precedence >= precedence) {
         op = i;
         precedence = current_precedence;
       }
