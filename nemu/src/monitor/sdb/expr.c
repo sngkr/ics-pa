@@ -187,8 +187,7 @@ static bool make_token(char *e) {
   return true;
 }
 
-
-//检查左右括号是否匹配
+// 检查左右括号是否匹配
 int check_parentheses(int p, int q) {
   if (tokens[p].type != '(' || tokens[q].type != ')') {
     return false;
@@ -210,42 +209,57 @@ int check_parentheses(int p, int q) {
 }
 
 int calc(int p, int q) {
-  int sign = 0;
+  // int sign = 0;
   int count = 0;
   int op = -1;
   for (int i = p; i <= q; i++) {
-    if (tokens[i].type == '(') {
-      count++;
-      continue;
-    }
-    if (tokens[i].type == ')') {
-      count--;
-      continue;
-    }
-    if (count != 0) {
-      continue;
-    }
-    if (tokens[i].type == NUM) {
-      continue;
-    }
-    if (sign <= 1 && (tokens[i].type == '+' || tokens[i].type == '-')) {
-      op = i;
-      sign = 1;
-    } else if (sign == 0 && (tokens[i].type == '*' || tokens[i].type == '/')) {
-      op = i;
-    }
-
-    //     if(tokens[i].type == LEFT){
+    // if (tokens[i].type == '(') {
     //   count++;
-    // }else if(tokens[i].type == RIGHT){
+    //   continue;
+    // }
+    // if (tokens[i].type == ')') {
     //   count--;
-    // }else if(count == 0 &&
-    //   (tokens[i].type == ADD || 
-    //    tokens[i].type == SUB || 
-    //    tokens[i].type == MULTI || 
-    //    tokens[i].type == DIV)){
+    //   continue;
+    // }
+    // if (count != 0) {
+    //   continue;
+    // }
+    // if (tokens[i].type == NUM) {
+    //   continue;
+    // }
+    // if (sign <= 1 && (tokens[i].type == '+' || tokens[i].type == '-')) {
+    //   op = i;
+    //   sign = 1;
+    // } else if (sign == 0 && (tokens[i].type == '*' || tokens[i].type == '/'))
+    // {
     //   op = i;
     // }
+    int precedence = __INT_MAX__;
+    // 平级先算哪个都行，对于这个  先算优先级低的
+    if (tokens[i].type == LEFT) {
+      count++;
+    } else if (tokens[i].type == RIGHT) {
+      count--;
+    } else if (count == 0) {
+      int current_precedence;
+      switch (tokens[i].type) {
+        case '+':
+        case '-':
+          current_precedence = 1;
+          break;
+        case '*':
+        case '/':
+          current_precedence = 2;
+          break;
+        default:
+          continue;  // If it's not an operator, we skip it
+      }
+      if (current_precedence <= precedence) {
+        op = i;
+        precedence = current_precedence;
+      }
+      op = i;
+    }
   }
   return op;
 }
