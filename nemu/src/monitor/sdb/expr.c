@@ -260,7 +260,7 @@ int calc(int p, int q) {
       }
       if (current_precedence >= precedence) {
         op = i;
-        Log("%d", op);
+        Log("nowop %d", op);
         precedence = current_precedence;
       }
       op = i;
