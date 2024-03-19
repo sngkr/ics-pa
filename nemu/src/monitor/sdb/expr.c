@@ -189,79 +189,55 @@ static bool make_token(char *e) {
 
 // 检查左右括号是否匹配
 int check_parentheses(int p, int q) {
-  if (tokens[p].type != '(' || tokens[q].type != ')') {
+  if (tokens[p].type != LEFT || tokens[q].type != RIGHT) {
     return false;
   }
 
-  int count = 0;
+  int parentheses = 0;
   for (int i = p + 1; i < q; i++) {
-    if (tokens[i].type == '(') {
-      count++;
-    } else if (tokens[i].type == ')') {
-      if (count == 0) {
+    if (tokens[i].type == LEFT) {
+      parentheses++;
+    } else if (tokens[i].type == RIGHT) {
+      if (parentheses == 0) {
         return false;  // 出现多余的右括号，不匹配
       }
-      count--;
+      parentheses--;
     }
   }
 
-  return count == 0;  // 如果 count 不为 0，则有多余的左括号，不匹配
+  return parentheses == 0;  // 如果 count 不为 0，则有多余的左括号，不匹配
 }
 
 int calc(int p, int q) {
-  // int sign = 0;
-  int count = 0;
+  int parentheses = 0;
   int op = -1;
+  
   int precedence = 100;
   for (int i = p; i <= q; i++) {
-    // if (tokens[i].type == '(') {
-    //   count++;
-    //   continue;
-    // }
-    // if (tokens[i].type == ')') {
-    //   count--;
-    //   continue;
-    // }
-    // if (count != 0) {
-    //   continue;
-    // }
-    // if (tokens[i].type == NUM) {
-    //   continue;
-    // }
-    // if (sign <= 1 && (tokens[i].type == '+' || tokens[i].type == '-')) {
-    //   op = i;
-    //   sign = 1;
-    // } else if (sign == 0 && (tokens[i].type == '*' || tokens[i].type == '/'))
-    // {
-    //   op = i;
-    // }
-   
     // 平级先算哪个都行，对于这个  先算优先级低的
     if (tokens[i].type == LEFT) {
-      count++;
+      parentheses++;
     } else if (tokens[i].type == RIGHT) {
-      count--;
-    } else if (count == 0) {
+      parentheses--;
+    } else if (parentheses == 0) {
       int current_precedence;
+      //具体优先级 可以调整  数值越大优先级越高，
       switch (tokens[i].type) {
         case ADD:
         case SUB:
-          current_precedence = 1;
+          current_precedence = 5;
           break;
         case MULTI:
         case DIV:
-          current_precedence = 2;
+          current_precedence = 6;
           break;
         default:
-          continue;  
+          continue;
       }
-      // Log("current_precedence %d: ", current_precedence);
       if (current_precedence <= precedence) {
-        // Log("i: %d current_precedence : %d  precedence:%d ",i, op, precedence);
         op = i;
         precedence = current_precedence;
       }
-
     }
   }
   return op;
