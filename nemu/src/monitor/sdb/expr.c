@@ -260,8 +260,8 @@ int calc(int p, int q) {
       }
       if (current_precedence <= precedence) {
         op = i;
-        Log("no wop %d", op);
         precedence = current_precedence;
+        Log("no wop%d precedence%d", op, precedence);
       }
       op = i;
     }
