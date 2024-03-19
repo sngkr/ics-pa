@@ -258,11 +258,11 @@ int calc(int p, int q) {
         default:
           continue;  // If it's not an operator, we skip it
       }
-      Log("current_precedence %d", current_precedence);
+      // Log("current_precedence %d: ", current_precedence);
       if (current_precedence <= precedence) {
+        Log("current_precedence : %d  precedence:%d ", op, precedence);
         op = i;
         precedence = current_precedence;
-        Log("no wop%d precedence:%d ", op, precedence);
       }
       op = i;
     }
