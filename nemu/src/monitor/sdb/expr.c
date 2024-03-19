@@ -30,9 +30,9 @@ enum {
   LEFT = 40,
   RIGHT = 41,
   MULTI = 42,
+  DIV = 47,
   ADD = 43,
   SUB = 45,
-  DIV = 47,
   NUM,
 
   TK_NOTYPE = 256,
@@ -252,6 +252,7 @@ int eval(int p, int q) {
     int val1 = eval(p, op - 1);
     int val2 = eval(op + 1, q);
 
+    Log("%d",tokens[op].type);
     switch (tokens[op].type) {
       case '+':
         return val1 + val2;
