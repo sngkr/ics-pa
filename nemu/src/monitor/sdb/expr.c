@@ -244,10 +244,14 @@ int calc(int p, int q) {
       int current_precedence;
       switch (tokens[i].type) {
         case '+':
+          current_precedence = 1;
+          break;
         case '-':
           current_precedence = 1;
           break;
         case '*':
+          current_precedence = 2;
+          break;
         case '/':
           current_precedence = 2;
           break;
