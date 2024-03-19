@@ -88,7 +88,7 @@ static struct {
      "hexadecimal format",
      cmd_x},
 
-    {"p", "Calculate ", cmd_p},
+    {"p", "Calculate the value of the expression EXPR", cmd_p},
 };
 
 #define NR_CMD ARRLEN(cmd_table)

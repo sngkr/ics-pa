@@ -187,6 +187,8 @@ static bool make_token(char *e) {
   return true;
 }
 
+
+//检查左右括号是否匹配
 int check_parentheses(int p, int q) {
   if (tokens[p].type != '(' || tokens[q].type != ')') {
     return false;
