@@ -212,6 +212,7 @@ int calc(int p, int q) {
   // int sign = 0;
   int count = 0;
   int op = -1;
+   int precedence = 100;
   for (int i = p; i <= q; i++) {
     // if (tokens[i].type == '(') {
     //   count++;
@@ -234,7 +235,7 @@ int calc(int p, int q) {
     // {
     //   op = i;
     // }
-    int precedence = 100;
+   
     // 平级先算哪个都行，对于这个  先算优先级低的
     if (tokens[i].type == LEFT) {
       count++;
